@@ -145,8 +145,8 @@ USE_DEVICE_SPECIFIC_GPS := true
 DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
 DEVICE_MATRIX_FILE := $(VENDOR_PATH)/compatibility_matrix.xml
 
-# Lineage Hardware
-JAVA_SOURCE_OVERLAYS := org.lineageos.hardware|$(VENDOR_PATH)/lineagehw|**/*.java
+# Key disabler
+JAVA_SOURCE_OVERLAYS := org.pixelexperience.keydisabler|$(VENDOR_PATH)/keydisabler|**/*.java
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
