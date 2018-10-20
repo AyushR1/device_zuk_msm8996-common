@@ -108,7 +108,7 @@ vendor/lib/libmmcamera2_memleak.so
 vendor/lib/libmmcamera2_pp_buf_mgr.so
 vendor/lib/libmmcamera2_pproc_modules.so
 vendor/lib/libmmcamera2_q3a_core.so
-vendor/lib/libmmcamera2_sensor_modules.so|08d6962a7ec9a517fae8e1997ed3a4357ac1bda9
+vendor/lib/libmmcamera2_sensor_modules.so|5be0ed400ea0aa97f060363be7af392d0394f60e
 vendor/lib/libmmcamera2_stats_algorithm.so
 vendor/lib/libmmcamera2_stats_modules.so
 vendor/lib/libmmcamera_dbg.so
@@ -336,7 +336,7 @@ vendor/lib64/libgeofence.so|a7fb8797a140f36d5a58d93955288bc9c2b3633e
 vendor/lib64/libizat_client_api.so|dbd2ec92bd1c61f511c9cc00cfd1de9a2b59e27f
 vendor/lib64/libizat_core.so|58abf7f7ce3ed211cf94d62d4bf162a0443ad7d1
 vendor/lib64/liblbs_core.so|5d4531fc52967e027d77f5f5e9b8b257d639c47e
--vendor/lib64/libloc_api_v02.so|2393690f4289a80c8eb193d210a21d074946eebb
+vendor/lib64/libloc_api_v02.so|2393690f4289a80c8eb193d210a21d074946eebb
 vendor/lib64/libloc_ds_api.so|3aaf82efb0eaf848e71b80a2cdb6c05d21bfbc8e
 vendor/lib64/libloc_externalDr.so|43039508b29f34c1b5b15c5bc266d083e77d0116
 vendor/lib64/liblocationservice_glue.so|e472e6e039f574c68731d8888c5820a54fcbf0fa
@@ -686,11 +686,11 @@ vendor/lib/libsensor1.so
 vendor/lib/libsensor_reg.so
 vendor/lib/sensors.ssc.so
 
-# Thermal - from bardock-pro - OPM1.171019.026
-vendor/bin/thermal-engine|40990b4c75dcb7d354e9bd768b387224bfe79bfd
--vendor/lib64/libthermalclient.so|5b5dcfc714a31a65e1757ef786e697b1a69e012e
-vendor/lib64/libthermalioctl.so|96cdd452d6ca70256b8621ec5ae8ac2ba0292260
--vendor/lib/libthermalclient.so|5e77723f69df323a85360c39722b8da00297ba9a
+# Thermal
+vendor/bin/thermal-engine
+-vendor/lib64/libthermalclient.so
+vendor/lib64/libthermalioctl.so
+-vendor/lib/libthermalclient.so
 
 # Time services - from LA.UM.7.2.r1-04000-sdm660.0 - B2N_sprout:9/PPR1.180610.011/00WW_3_22C
 -vendor/app/TimeService/TimeService.apk|25337e4160093a998c0e4cfced1c1a6c51177dff
@@ -698,13 +698,13 @@ vendor/bin/time_daemon|757b977a7e6fab2c56b669f0922a74d5af28dd27
 vendor/lib/libtime_genoff.so|267516e23fe515013b6ef4e2f7edd0049fb75466
 vendor/lib64/libtime_genoff.so|de6f521a43174b748043790cc23181e88560fe32
 
-# TUI - from bardock-pro - OPM1.171019.026
-lib/vendor.qti.hardware.tui_comm@1.0.so|21e76b9d6e0aba4b601a24ec38e81a30e6d2f319
-lib64/vendor.qti.hardware.tui_comm@1.0.so|23259afec43beef5d2314ae814e00475ee34232e
-vendor/bin/hw/vendor.qti.hardware.tui_comm@1.0-service-qti|df9b713b1f04917646f40d37f1900f013e346ad8
-vendor/etc/init/vendor.qti.hardware.tui_comm@1.0-service-qti.rc|2cfc563d7e1579374f001c94588fae7835a12ffc
-vendor/lib/vendor.qti.hardware.tui_comm@1.0_vendor.so|cdb0454905bcd5124ccb6e69df6f8256ce203250
-vendor/lib64/vendor.qti.hardware.tui_comm@1.0_vendor.so|359b87c1daad8c430005c86c451a7b095a934d91
+# TUI
+lib/vendor.qti.hardware.tui_comm@1.0.so
+lib64/vendor.qti.hardware.tui_comm@1.0.so
+vendor/bin/hw/vendor.qti.hardware.tui_comm@1.0-service-qti
+vendor/etc/init/vendor.qti.hardware.tui_comm@1.0-service-qti.rc
+vendor/lib/vendor.qti.hardware.tui_comm@1.0_vendor.so
+vendor/lib64/vendor.qti.hardware.tui_comm@1.0_vendor.so
 
 # Widevine DRM - from LA.UM.7.2.r1-04000-sdm660.0 - B2N_sprout:9/PPR1.180610.011/00WW_3_22C
 vendor/bin/hw/android.hardware.drm@1.1-service.widevine|abdfb842a9b540f6540094d649072961ff7eff75
