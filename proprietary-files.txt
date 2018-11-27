@@ -689,11 +689,12 @@ vendor/lib/libsensor1.so
 vendor/lib/libsensor_reg.so
 vendor/lib/sensors.ssc.so
 
-# Thermal
-vendor/bin/thermal-engine
--vendor/lib64/libthermalclient.so
-vendor/lib64/libthermalioctl.so
--vendor/lib/libthermalclient.so
+# Thermal - from jasmine PKQ1.180904.001
+vendor/bin/thermal-engine|f750e90af4a73df3dd51ccb87e150d971c5bef7d
+vendor/lib64/libthermalclient.so|54121e31e4a5170f8c50e36ddb57685b6c538a21
+vendor/lib64/libthermalioctl.so|0edca2e89fbd872d8595517254669ea7feb1e0b0
+vendor/lib64/libthermalfeature.so|655a4b39b45a80069d7d8706a921ee0ace3a4865
+vendor/lib/libthermalclient.so|4579096edb376b06827f8e90a49480cf121030f0
 
 # Time services - from LA.UM.7.2.r1-04000-sdm660.0 - B2N_sprout:9/PPR1.180610.011/00WW_3_22C
 -vendor/app/TimeService/TimeService.apk|25337e4160093a998c0e4cfced1c1a6c51177dff
