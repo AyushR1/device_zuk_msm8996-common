@@ -442,7 +442,6 @@ vendor/firmware/a530v3_gpmu.fw2
 vendor/firmware/a530v3_seq.fw2
 
 # IMS
--app/ims/ims.apk|3806a916da8adc1e1787ec45a074a55968a0e752
 -app/uceShimService/uceShimService.apk
 etc/permissions/com.qualcomm.qti.imscmservice.xml
 etc/permissions/qti-vzw-ims-internal.xml
@@ -458,6 +457,7 @@ lib64/libimscamera_jni.so
 lib64/libimsmedia_jni.so
 lib64/librcc.so
 lib64/vendor.qti.imsrtpservice@1.0.so
+-priv-app/ims/ims.apk|eef47c0b6f250e7f96e7155d84274b1c83940d8f
 vendor/bin/ims_rtp_daemon
 vendor/bin/imsdatadaemon
 vendor/bin/imsqmidaemon
@@ -643,7 +643,7 @@ etc/permissions/telephonyservice.xml
 framework/embmslibrary.jar|180D4D6B65D989023364457EB1BF6E1D45F7E274
 framework/QtiTelephonyServicelibrary.jar|C2635709E7F9C57FF339DFD99F253BA0D4D9CC35
 framework/qcrilhook.jar
-framework/qti-telephony-common.jar|3095732632274738a978f8b26332c7e98f85f112
+framework/qti-telephony-common.jar|b1953a3599255f08f1785c677d22810f65e0167b
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/bin/ATFWD-daemon
 vendor/bin/netmgrd
