@@ -55,10 +55,7 @@ on boot
     chown system system /dev/cpuset/camera-daemon
     chown system system /dev/cpuset/camera-daemon/tasks
     chmod 0664 /dev/cpuset/camera-daemon/tasks
-
-    # Enable sched boost
-    write /proc/sys/kernel/sched_boost 1
-
+    
 on charger
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     # Enable UFS powersaving
@@ -81,9 +78,6 @@ on enable-low-power
     # Disable thermal hotplug to switch governor
     write /sys/module/msm_thermal/core_control/enabled 0
 
-    # Enable Adaptive LMK
-    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 81250
 
     # Set sync wakee policy tunable
     write /proc/sys/kernel/sched_prefer_sync_wakee_to_waker 1
@@ -98,55 +92,34 @@ on enable-low-power
     write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 500
     write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 20000
 
-    # Configure governor settings for little cluster
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 960000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 19000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 79000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
-
     # Bring CPU2 online
     write /sys/devices/system/cpu/cpu2/online 1
-
-    # Configure governor settings for big cluster
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/use_sched_load 1
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/use_migration_notif 1
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000 2100000:79000"
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq 1248000
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/target_loads "85 1500000:90 1800000:70 2100000:95"
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time 19000
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis 79000
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
-    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif 1
 
     # Re-enable thermal hotplug
     write /sys/module/msm_thermal/core_control/enabled 1
 
-    # Input boost config
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036000 2:1324800"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 40
+    # Enable all LPMs (this will enable C4, D4, D3, E4 and M3 LPMs)
+    write /sys/module/lpm_levels/parameters/sleep_disabled "N"
 
-    # Set big.LITTLE scheduler parameters
-    write /proc/sys/kernel/sched_boost 0
-    write /proc/sys/kernel/sched_migration_fixup 1
-    write /proc/sys/kernel/sched_upmigrate 45
-    write /proc/sys/kernel/sched_downmigrate 45
-    write /proc/sys/kernel/sched_freq_inc_notify 400000
-    write /proc/sys/kernel/sched_freq_dec_notify 400000
-    write /proc/sys/kernel/sched_spill_nr_run 3
-    write /proc/sys/kernel/sched_init_task_load 100
+    # Set perfd properties
+    setprop sys.post_boot.parsed 1
+    
+    # Enable Power-Efficient Workqueue
+    write /sys/module/workqueue/parameters/power_efficient Y    
+    
+    # Kcal Configuration
+    write /sys/devices/platform/kcal_ctrl.0/kcal_min 33
+    write /sys/devices/platform/kcal_ctrl.0/kcal_cont 261
+    write /sys/devices/platform/kcal_ctrl.0/kcal_val 250
+    write /sys/devices/platform/kcal_ctrl.0/kcal_hue 0
+    write /sys/devices/platform/kcal_ctrl.0/kcal "256 256 256"
+    write /sys/devices/platform/kcal_ctrl.0/kcal_enable 1
+    write /sys/devices/platform/kcal_ctrl.0/kcal_sat 258
+    
+    # Set Headphone gain
+    write /sys/kernel/sound_control/headphone_gain "10 10"
+    write /sys/kernel/sound_control/speaker_gain "11 11"
+    write /sys/module/snd_soc_wcd9330/parameters/high_perf_mode 1
 
     # Enable bus-dcvs
     write /sys/class/devfreq/soc:qcom,cpubw/governor "bw_hwmon"
@@ -174,12 +147,114 @@ on enable-low-power
     write /sys/devices/soc/${ro.boot.bootdevice}/clkscale_enable 1
     write /sys/devices/soc/${ro.boot.bootdevice}/clkgate_enable 1
     write /sys/devices/soc/${ro.boot.bootdevice}/${ro.boot.bootdevice}:ufs_variant/pm_qos_enable 1
+    
+    write /proc/sys/fs/dir-notify-enable "0"
+    write /proc/sys/fs/lease-break-time "20"
+    
+    # Disable logging
+    write /sys/module/binder/parameters/debug_mask "0"
+    write /sys/module/bluetooth/parameters/disable_ertm "N" 
+	write /sys/module/bluetooth/parameters/disable_esco "N"
+	write /sys/module/debug/parameters/enable_event_log "0"
+	write /sys/module/edac_core/parameters/edac_mc_log_ce "0"
+	write /sys/module/edac_core/parameters/edac_mc_log_ue "0"
+	write /sys/module/glink/parameters/debug_mask "0"
+	write /sys/module/hid_logitech_hidpp/parameters/disable_raw_mode "Y"
+	write /sys/module/hid_logitech_hidpp/parameters/disable_tap_to_click "Y"
+	write /sys/module/hid_magicmouse/parameters/emulate_3button "N" 
+	write /sys/module/hid_magicmouse/parameters/emulate_scroll_wheel "N"
+	write /sys/module/hid_magicmouse/parameters/scroll_speed "0"
+	write /sys/module/ip6_tunnel/parameters/log_ecn_error "N"
+	write /sys/module/kernel/parameters/panic "0"
+	write /sys/module/libcomposite/parameters/disable_l1_for_hs "N"
+	write /sys/module/msm_show_resume_irq/parameters/debug_mask "0"
+	write /sys/module/otg_wakelock/parameters/enabled "N"
+	write /sys/module/service_locator/parameters/enable "0"
+	write /sys/module/sit/parameters/log_ecn_error "N"
+	write /sys/module/smp2p/parameters/debug_mask "0"
+	write /sys/module/touch_core_base/parameters/debug_mask "0"
+	write /sys/module/usb_bam/parameters/enable_event_log "0"
+	
+	write /proc/sys/kernel/compat-log "0"
+	write /proc/sys/kernel/panic "0"
+	write /proc/sys/kernel/panic_on_oops "0"
+	write /proc/sys/kernel/perf_cpu_time_max_percent "0"
+	
+	# Better bb
+	write /proc/sys/net/core/netdev_tstamp_prequeue "0"
+    write /proc/sys/net/ipv4/tcp_ecn "1" 
+    write /proc/sys/net/ipv4/tcp_keepalive_intvl "320"
+    write /proc/sys/net/ipv4/tcp_keepalive_time "21600"
+    write /proc/sys/net/ipv4/tcp_probe_interval "1500"
+	
+	
+	write /sys/block/dm-0/queue/add_random "0"
+	write /sys/block/dm-0/queue/iostats "0"
+	write /sys/block/loop0/queue/add_random "0"
+	write /sys/block/loop0/queue/iostats "0"
+	write /sys/block/loop1/queue/add_random "0"
+	write /sys/block/loop1/queue/iostats "0"
+	write /sys/block/loop2/queue/add_random "0"
+	write /sys/block/loop2/queue/iostats "0"
+	write /sys/block/loop3/queue/add_random "0"
+	write /sys/block/loop3/queue/iostats "0"
+	write /sys/block/loop4/queue/add_random "0"
+	write /sys/block/loop4/queue/iostats "0"
+	write /sys/block/loop5/queue/add_random "0"
+	write /sys/block/loop5/queue/iostats "0"
+	write /sys/block/loop6/queue/add_random "0"
+	write /sys/block/loop6/queue/iostats "0"
+	write /sys/block/loop7/queue/add_random "0"
+	write /sys/block/loop7/queue/iostats "0"
+	write /sys/block/loop8/queue/add_random "0"
+	write /sys/block/loop8/queue/iostats "0"
+	write /sys/block/ram0/queue/add_random "0"
+	write /sys/block/ram0/queue/iostats "0"
+	write /sys/block/ram1/queue/add_random "0"
+	write /sys/block/ram1/queue/iostats "0"
+	write /sys/block/ram2/queue/add_random "0"
+	write /sys/block/ram2/queue/iostats "0"
+	write /sys/block/ram3/queue/add_random "0"
+	write /sys/block/ram3/queue/iostats "0"
+	write /sys/block/ram4/queue/add_random "0"
+	write /sys/block/ram4/queue/iostats "0"
+	write /sys/block/ram5/queue/add_random "0"
+	write /sys/block/ram5/queue/iostats "0"
+	write /sys/block/ram6/queue/add_random "0"
+	write /sys/block/ram6/queue/iostats "0"
+	write /sys/block/ram7/queue/add_random "0"
+	write /sys/block/ram7/queue/iostats "0"
+	write /sys/block/ram8/queue/add_random "0"
+	write /sys/block/ram8/queue/iostats "0"
+	write /sys/block/ram9/queue/add_random "0"
+	write /sys/block/ram9/queue/iostats "0"
+	write /sys/block/ram10/queue/add_random "0"
+	write /sys/block/ram10/queue/iostats "0"
+	write /sys/block/ram11/queue/add_random "0"
+	write /sys/block/ram11/queue/iostats "0"
+	write /sys/block/ram12/queue/add_random "0"
+	write /sys/block/ram12/queue/iostats "0"
+	write /sys/block/ram13/queue/add_random "0"
+	write /sys/block/ram13/queue/iostats "0"
+	write /sys/block/ram14/queue/add_random "0"
+	write /sys/block/ram14/queue/iostats "0"
+	write /sys/block/ram15/queue/add_random "0"
+	write /sys/block/ram15/queue/iostats "0"
+	write /sys/block/sda/queue/add_random "0"
+	write /sys/block/sda/queue/iostats "0"
+	write /sys/block/sdb/queue/add_random "0"
+	write /sys/block/sdb/queue/iostats "0"
+	write /sys/block/sdc/queue/add_random "0"
+	write /sys/block/sdc/queue/iostats "0"
+	write /sys/block/sdd/queue/add_random "0"
+	write /sys/block/sdd/queue/iostats "0"
+	write /sys/block/sde/queue/add_random "0"
+	write /sys/block/sde/queue/iostats "0"
+	write /sys/block/sdf/queue/add_random "0"
+	write /sys/block/sdf/queue/iostats "0"
+	write /sys/block/zram0/queue/add_random "0"
+	write /sys/block/zram0/queue/iostats "0"
 
-    # Enable all LPMs (this will enable C4, D4, D3, E4 and M3 LPMs)
-    write /sys/module/lpm_levels/parameters/sleep_disabled "N"
-
-    # Set perfd properties
-    setprop sys.post_boot.parsed 1
 
 on property:sys.boot_completed=1
     trigger enable-low-power
@@ -192,6 +267,7 @@ on property:sys.boot_completed=1
     write /dev/cpuset/foreground/cpus 0-2
     write /dev/cpuset/background/cpus 0
     write /dev/cpuset/system-background/cpus 0-1
+    write /dev/cpuset/restricted/cpus 0-1
 
     # Setup permission for powerHAL
     chown system system /sys/devices/soc/soc:qcom,cpubw/devfreq/soc:qcom,cpubw/bw_hwmon/hyst_trigger_count
